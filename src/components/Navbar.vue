@@ -13,8 +13,6 @@ const toggleDrop = () => {
 const closeDrop = () => {
     dropData.showDrop = false
 }
-
-//const text = ref(window.test.testFunc())
 </script>
 
 

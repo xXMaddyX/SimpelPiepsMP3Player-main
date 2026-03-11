@@ -7,8 +7,6 @@ const tracklist = inject('musicFiles');
 const seeking = ref(false);
 const seekValue = ref(0);
 
-// ── Hilfsfunktionen ─────────────────────────────────────────────────────────
-
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return '0:00';
   const m = Math.floor(seconds / 60);
@@ -24,8 +22,6 @@ const volPercent = computed(() =>
   store.isMuted ? 0 : store.volume * 100
 );
 
-// ── Playback ─────────────────────────────────────────────────────────────────
-
 const playTrack = (trackPath, index) => {
   const audio = audioRef.value;
   audio.src = trackPath;
@@ -33,7 +29,6 @@ const playTrack = (trackPath, index) => {
   audio.play();
   store.currentTrackIndex = index;
   store.isPlaying = true;
-  // Dateiname ohne Erweiterung
   const parts = trackPath.replace(/\\/g, '/').split('/');
   store.currentTrackName = parts[parts.length - 1].replace(/\.[^/.]+$/, '');
 };
@@ -93,8 +88,6 @@ const seekRelative = (seconds) => {
   audio.currentTime = Math.max(0, Math.min(audio.currentTime + seconds, store.duration));
 };
 
-// ── Audio events ──────────────────────────────────────────────────────────────
-
 const onTimeUpdate = () => {
   if (!seeking.value) {
     store.currentTime = audioRef.value.currentTime;
@@ -106,8 +99,6 @@ const onTimeUpdate = () => {
 const onLoadedMetadata = () => {
   store.duration = audioRef.value.duration || 0;
 };
-
-// ── Seek ──────────────────────────────────────────────────────────────────────
 
 const onSeekMousedown = () => { seeking.value = true; };
 
@@ -121,8 +112,6 @@ const onSeekChange = (e) => {
   seeking.value = false;
 };
 
-// ── Volume ────────────────────────────────────────────────────────────────────
-
 const onVolumeChange = (e) => {
   store.volume = parseFloat(e.target.value);
   audioRef.value.volume = store.volume;
@@ -134,8 +123,6 @@ const toggleMute = () => {
   audioRef.value.volume = store.isMuted ? 0 : store.volume;
 };
 
-// ── Repeat / Shuffle ──────────────────────────────────────────────────────────
-
 const toggleShuffle = () => { store.shuffleMode = !store.shuffleMode; };
 const toggleRepeat = () => { store.repeatMode = (store.repeatMode + 1) % 3; };
 
@@ -145,14 +132,11 @@ const repeatTitle = computed(() => {
   return 'Repeat One';
 });
 
-// ── Expose für App.vue ────────────────────────────────────────────────────────
-
 defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative, toggleMute });
 </script>
 
 <template>
   <div class="player-bar">
-    <!-- Verstecktes Audio-Element -->
     <audio
       ref="audioRef"
       @timeupdate="onTimeUpdate"
@@ -160,7 +144,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
       @ended="playNextTrack"
     />
 
-    <!-- Seek-Leiste -->
     <div class="progress-row">
       <span class="time">{{ formatTime(store.currentTime) }}</span>
       <div class="seek-track">
@@ -181,10 +164,8 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
       <span class="time right">{{ formatTime(store.duration) }}</span>
     </div>
 
-    <!-- Controls -->
     <div class="controls-row">
 
-      <!-- Links: Shuffle + Repeat -->
       <div class="controls-side left">
         <button
           :class="['ctrl-btn', { active: store.shuffleMode }]"
@@ -214,7 +195,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
         </button>
       </div>
 
-      <!-- Mitte: Prev / Play / Next -->
       <div class="controls-center">
         <button class="ctrl-btn" @click="playPrevTrack" title="Vorheriger Track (P)">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -224,11 +204,9 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
         </button>
 
         <button class="play-btn" @click="togglePlay" :title="store.isPlaying ? 'Pause (Space)' : 'Play (Space)'">
-          <!-- Play icon -->
           <svg v-if="!store.isPlaying" viewBox="0 0 24 24" fill="currentColor">
             <polygon points="6 3 20 12 6 21 6 3"/>
           </svg>
-          <!-- Pause icon -->
           <svg v-else viewBox="0 0 24 24" fill="currentColor">
             <rect x="5" y="3" width="4" height="18" rx="1.5"/>
             <rect x="15" y="3" width="4" height="18" rx="1.5"/>
@@ -243,21 +221,17 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
         </button>
       </div>
 
-      <!-- Rechts: Volume -->
       <div class="controls-side right">
         <button class="ctrl-btn" @click="toggleMute" :title="store.isMuted ? 'Unmute (M)' : 'Mute (M)'">
-          <!-- Laut -->
           <svg v-if="!store.isMuted && store.volume > 0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
-          <!-- Leise -->
           <svg v-else-if="!store.isMuted && store.volume > 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
-          <!-- Stumm / 0 -->
           <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
             <line x1="23" y1="9" x2="17" y2="15"/>
@@ -296,7 +270,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   flex-shrink: 0;
 }
 
-/* ── Seek ── */
 .progress-row {
   display: flex;
   align-items: center;
@@ -353,7 +326,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* ── Volume ── */
 .vol-track {
   width: 88px;
   height: 3px;
@@ -371,7 +343,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   pointer-events: none;
 }
 
-/* Shared invisible range input overlay */
 .range-overlay {
   position: absolute;
   inset: -7px 0;
@@ -383,7 +354,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   padding: 0;
 }
 
-/* ── Controls ── */
 .controls-row {
   display: flex;
   align-items: center;
@@ -407,7 +377,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   justify-content: flex-end;
 }
 
-/* ── Buttons ── */
 .ctrl-btn {
   background: none;
   border: none;
@@ -450,7 +419,6 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   line-height: 1;
 }
 
-/* ── Play button ── */
 .play-btn {
   width: 42px;
   height: 42px;

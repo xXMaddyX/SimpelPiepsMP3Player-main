@@ -5,7 +5,6 @@ import mascot from '../assets/PiepsmitTasse.png';
 
 const hasTrack = computed(() => store.currentTrackIndex !== -1);
 
-// Versuche "Artist - Titel" Format zu parsen
 const parsedTrack = computed(() => {
   if (!store.currentTrackName) return { artist: null, title: '' };
   const parts = store.currentTrackName.split(' - ');
@@ -21,17 +20,14 @@ const parsedTrack = computed(() => {
 
 <template>
   <div class="main-view">
-    <!-- Hintergrund-Glow -->
     <div class="bg-glow" :class="{ active: store.isPlaying }"></div>
 
     <div class="content-wrapper">
-      <!-- Maskottchen -->
       <div class="mascot-wrap" :class="{ playing: store.isPlaying }">
         <div class="ring" v-if="store.isPlaying"></div>
         <img :src="mascot" class="mascot" alt="Pieps" draggable="false" />
       </div>
 
-      <!-- Track-Anzeige wenn Track geladen -->
       <div v-if="hasTrack" class="track-display">
         <p v-if="parsedTrack.artist" class="artist">{{ parsedTrack.artist }}</p>
         <h1 class="title">{{ parsedTrack.title }}</h1>
@@ -45,7 +41,6 @@ const parsedTrack = computed(() => {
         </div>
       </div>
 
-      <!-- Welcome wenn kein Track -->
       <div v-else class="welcome">
         <h1 class="welcome-title">Pieps Music Player</h1>
         <p class="welcome-hint">Wähle einen Track aus der Bibliothek</p>
@@ -93,7 +88,6 @@ const parsedTrack = computed(() => {
   padding: 20px;
 }
 
-/* Mascot */
 .mascot-wrap {
   position: relative;
   display: flex;
@@ -135,7 +129,6 @@ const parsedTrack = computed(() => {
   50% { transform: translateY(-10px); }
 }
 
-/* Track info */
 .track-display {
   text-align: center;
   max-width: 420px;
@@ -196,7 +189,6 @@ const parsedTrack = computed(() => {
   50% { opacity: 0.25; }
 }
 
-/* Welcome screen */
 .welcome {
   text-align: center;
 }

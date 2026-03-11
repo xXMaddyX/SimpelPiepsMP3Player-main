@@ -1,7 +1,7 @@
 <script setup>
 import { ref, inject, defineEmits } from 'vue';
 
-const emit = defineEmits(['close']); // Declare the event
+const emit = defineEmits(['close']);
 
 const closeDrop = () => {
     emit('close');

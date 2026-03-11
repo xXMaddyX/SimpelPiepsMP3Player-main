@@ -14,7 +14,6 @@ const playSelectedTrack = (trackPath, index) => {
   playerBarRef.value.playTrack(trackPath, index);
 };
 
-// Globale Keyboard-Shortcuts
 const handleKeydown = (e) => {
   if (e.target.tagName === 'INPUT') return;
   const pb = playerBarRef.value;

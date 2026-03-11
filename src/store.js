@@ -5,7 +5,7 @@ export const store = reactive({
   currentTrackName: '',
   isPlaying: false,
   shuffleMode: false,
-  repeatMode: 0, // 0 = kein Repeat, 1 = Repeat All, 2 = Repeat One
+  repeatMode: 0,
   volume: 0.8,
   isMuted: false,
   currentTime: 0,

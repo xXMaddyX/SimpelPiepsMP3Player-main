@@ -51,7 +51,6 @@ const selectTrack = (path, index) => {
     </div>
 
     <div class="track-list">
-      <!-- Empty state -->
       <div v-if="tracklist.length === 0" class="empty-state">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
@@ -59,7 +58,6 @@ const selectTrack = (path, index) => {
         <p>Klicke auf <strong>Ordner öffnen</strong><br>um Musik zu laden</p>
       </div>
 
-      <!-- No results -->
       <div v-else-if="filteredTracks.length === 0" class="empty-state">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -67,7 +65,6 @@ const selectTrack = (path, index) => {
         <p>Keine Ergebnisse</p>
       </div>
 
-      <!-- Track list -->
       <div
         v-for="item in filteredTracks"
         :key="item.index"
@@ -130,7 +127,6 @@ const selectTrack = (path, index) => {
   border-radius: 10px;
 }
 
-/* Search */
 .search-box {
   margin: 0 10px 10px;
   background: rgba(255, 255, 255, 0.04);
@@ -188,7 +184,6 @@ const selectTrack = (path, index) => {
   color: #c0c0e0;
 }
 
-/* Track list */
 .track-list {
   flex: 1;
   overflow-y: auto;
@@ -209,7 +204,6 @@ const selectTrack = (path, index) => {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Empty state */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -235,7 +229,6 @@ const selectTrack = (path, index) => {
   color: #7c3aed;
 }
 
-/* Track item */
 .track-item {
   display: flex;
   align-items: center;
@@ -254,7 +247,6 @@ const selectTrack = (path, index) => {
   background: rgba(124, 58, 237, 0.14);
 }
 
-/* Track number / indicator */
 .track-num {
   width: 22px;
   height: 18px;
@@ -273,7 +265,6 @@ const selectTrack = (path, index) => {
   color: #8888bb;
 }
 
-/* Animated bars when playing */
 .bars {
   display: flex;
   align-items: flex-end;
@@ -304,7 +295,6 @@ const selectTrack = (path, index) => {
   color: #a855f7;
 }
 
-/* Track name */
 .track-info {
   flex: 1;
   min-width: 0;
