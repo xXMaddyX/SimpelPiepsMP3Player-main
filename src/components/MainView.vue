@@ -61,7 +61,7 @@ const parsedTrack = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at 50% 40%, #13132a 0%, #0d0d14 65%);
+  background: radial-gradient(ellipse at 50% 40%, #08132a 0%, #07101a 65%);
   overflow: hidden;
   position: relative;
 }
@@ -69,7 +69,7 @@ const parsedTrack = computed(() => {
 .bg-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(124, 58, 237, 0.07) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(29, 78, 216, 0.07) 0%, transparent 65%);
   opacity: 0;
   transition: opacity 1s ease;
   pointer-events: none;
@@ -100,7 +100,7 @@ const parsedTrack = computed(() => {
   width: 210px;
   height: 210px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
   animation: ringPulse 2.2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -116,11 +116,11 @@ const parsedTrack = computed(() => {
   max-height: 210px;
   object-fit: contain;
   transition: filter 0.5s, transform 0.5s;
-  filter: drop-shadow(0 4px 24px rgba(124, 58, 237, 0.25));
+  filter: drop-shadow(0 4px 24px rgba(29, 78, 216, 0.25));
 }
 
 .mascot-wrap.playing .mascot {
-  filter: drop-shadow(0 4px 32px rgba(168, 85, 247, 0.5));
+  filter: drop-shadow(0 4px 32px rgba(59, 130, 246, 0.5));
   animation: mascotFloat 3s ease-in-out infinite;
 }
 
@@ -137,7 +137,7 @@ const parsedTrack = computed(() => {
 .artist {
   font-size: 12px;
   font-weight: 600;
-  color: #7755cc;
+  color: #3366cc;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 6px;
@@ -146,7 +146,7 @@ const parsedTrack = computed(() => {
 .title {
   font-size: 22px;
   font-weight: 700;
-  color: #f0f0ff;
+  color: #e8f0ff;
   line-height: 1.25;
   margin-bottom: 14px;
   word-break: break-word;
@@ -156,19 +156,19 @@ const parsedTrack = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: rgba(124, 58, 237, 0.13);
-  border: 1px solid rgba(168, 85, 247, 0.28);
+  background: rgba(29, 78, 216, 0.13);
+  border: 1px solid rgba(59, 130, 246, 0.28);
   padding: 4px 14px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
-  color: #a855f7;
+  color: #3b82f6;
 }
 
 .badge.paused {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.08);
-  color: #555577;
+  color: #446688;
 }
 
 .badge-dot {
@@ -196,7 +196,7 @@ const parsedTrack = computed(() => {
 .welcome-title {
   font-size: 26px;
   font-weight: 800;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #60a5fa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -205,7 +205,7 @@ const parsedTrack = computed(() => {
 
 .welcome-hint {
   font-size: 13px;
-  color: #444466;
+  color: #334466;
   margin-bottom: 24px;
 }
 
@@ -219,7 +219,7 @@ const parsedTrack = computed(() => {
 .shortcuts span {
   font-size: 10px;
   font-weight: 600;
-  color: #333355;
+  color: #223355;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 4px 10px;

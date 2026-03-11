@@ -96,7 +96,7 @@ const selectTrack = (path, index) => {
 .sidebar {
   width: 275px;
   min-width: 200px;
-  background: #10101e;
+  background: #080f1a;
   border-right: 1px solid rgba(255, 255, 255, 0.055);
   display: flex;
   flex-direction: column;
@@ -114,14 +114,14 @@ const selectTrack = (path, index) => {
 .sidebar-title {
   font-size: 14px;
   font-weight: 700;
-  color: #d0d0f0;
+  color: #c0d4f0;
   flex: 1;
 }
 
 .track-count {
   font-size: 11px;
   font-weight: 600;
-  color: #444466;
+  color: #334466;
   background: rgba(255, 255, 255, 0.05);
   padding: 2px 7px;
   border-radius: 10px;
@@ -140,13 +140,13 @@ const selectTrack = (path, index) => {
 }
 
 .search-box:focus-within {
-  border-color: rgba(124, 58, 237, 0.4);
+  border-color: rgba(29, 78, 216, 0.4);
 }
 
 .search-icon {
   width: 13px;
   height: 13px;
-  color: #444466;
+  color: #334466;
   flex-shrink: 0;
 }
 
@@ -154,20 +154,20 @@ const selectTrack = (path, index) => {
   background: none;
   border: none;
   outline: none;
-  color: #e0e0ff;
+  color: #d0e4ff;
   font-size: 12px;
   padding: 8px 0;
   width: 100%;
 }
 
 .search-input::placeholder {
-  color: #444466;
+  color: #334466;
 }
 
 .clear-btn {
   background: none;
   border: none;
-  color: #555577;
+  color: #446688;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -210,7 +210,7 @@ const selectTrack = (path, index) => {
   align-items: center;
   justify-content: center;
   padding: 48px 20px;
-  color: #333355;
+  color: #223355;
   text-align: center;
   gap: 14px;
 }
@@ -226,7 +226,7 @@ const selectTrack = (path, index) => {
 }
 
 .empty-state strong {
-  color: #7c3aed;
+  color: #1d4ed8;
 }
 
 .track-item {
@@ -244,7 +244,7 @@ const selectTrack = (path, index) => {
 }
 
 .track-item.playing {
-  background: rgba(124, 58, 237, 0.14);
+  background: rgba(29, 78, 216, 0.14);
 }
 
 .track-num {
@@ -258,11 +258,11 @@ const selectTrack = (path, index) => {
 
 .num {
   font-size: 11px;
-  color: #444466;
+  color: #334466;
 }
 
 .track-item:hover .num {
-  color: #8888bb;
+  color: #6699cc;
 }
 
 .bars {
@@ -274,7 +274,7 @@ const selectTrack = (path, index) => {
 
 .bar {
   width: 3px;
-  background: #a855f7;
+  background: #3b82f6;
   border-radius: 1.5px;
   animation: barBounce 0.7s ease-in-out infinite;
   transform-origin: bottom;
@@ -292,7 +292,7 @@ const selectTrack = (path, index) => {
 .paused-icon {
   width: 11px;
   height: 11px;
-  color: #a855f7;
+  color: #3b82f6;
 }
 
 .track-info {
@@ -302,7 +302,7 @@ const selectTrack = (path, index) => {
 
 .track-name {
   font-size: 12px;
-  color: #aaaacc;
+  color: #88aacc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -311,11 +311,11 @@ const selectTrack = (path, index) => {
 }
 
 .track-item:hover .track-name {
-  color: #e0e0ff;
+  color: #d0e4ff;
 }
 
 .track-item.playing .track-name {
-  color: #f0f0ff;
+  color: #e8f0ff;
   font-weight: 600;
 }
 </style>

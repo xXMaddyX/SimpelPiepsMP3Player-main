@@ -21,8 +21,8 @@ const openFolder = async () => {
     <div class="drag-region">
       <div class="app-info">
         <svg class="app-icon" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#7c3aed" stroke-width="1.5"/>
-          <path d="M9 8l8 4-8 4V8z" fill="#a855f7"/>
+          <circle cx="12" cy="12" r="10" stroke="#1d4ed8" stroke-width="1.5"/>
+          <path d="M9 8l8 4-8 4V8z" fill="#3b82f6"/>
         </svg>
         <span class="app-name">Pieps Music Player</span>
       </div>
@@ -63,7 +63,7 @@ const openFolder = async () => {
 <style scoped>
 .titlebar {
   height: 40px;
-  background: #08080f;
+  background: #04080f;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -95,7 +95,7 @@ const openFolder = async () => {
 .app-name {
   font-size: 12px;
   font-weight: 600;
-  color: #6666aa;
+  color: #5577bb;
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
@@ -112,7 +112,7 @@ const openFolder = async () => {
   gap: 6px;
   background: none;
   border: none;
-  color: #7777aa;
+  color: #6688bb;
   cursor: pointer;
   padding: 5px 12px;
   font-size: 12px;
@@ -128,8 +128,8 @@ const openFolder = async () => {
 }
 
 .folder-btn:hover {
-  color: #f0f0ff;
-  background: rgba(124, 58, 237, 0.18);
+  color: #e8f0ff;
+  background: rgba(29, 78, 216, 0.18);
 }
 
 .separator {
@@ -149,7 +149,7 @@ const openFolder = async () => {
   height: 40px;
   background: none;
   border: none;
-  color: #666688;
+  color: #445577;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -164,7 +164,7 @@ const openFolder = async () => {
 
 .win-btn:hover {
   background: rgba(255, 255, 255, 0.07);
-  color: #f0f0ff;
+  color: #e8f0ff;
 }
 
 .close-btn:hover {

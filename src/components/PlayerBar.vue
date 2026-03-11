@@ -260,7 +260,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 <style scoped>
 .player-bar {
   height: 88px;
-  background: #0c0c1a;
+  background: #07101a;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
@@ -278,7 +278,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 
 .time {
   font-size: 11px;
-  color: #555577;
+  color: #446688;
   width: 34px;
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
@@ -298,13 +298,13 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 }
 
 .seek-track:hover .seek-fill {
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.55);
 }
 
 .seek-fill {
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
   border-radius: 2px;
   pointer-events: none;
   transition: width 0.05s linear;
@@ -317,7 +317,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #c084fc;
+  background: #60a5fa;
   pointer-events: none;
   transition: transform 0.1s;
 }
@@ -338,7 +338,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 .vol-fill {
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
   border-radius: 2px;
   pointer-events: none;
 }
@@ -380,7 +380,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 .ctrl-btn {
   background: none;
   border: none;
-  color: #555577;
+  color: #446688;
   cursor: pointer;
   padding: 6px;
   border-radius: 7px;
@@ -397,16 +397,16 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 }
 
 .ctrl-btn:hover {
-  color: #c0c0e0;
+  color: #a0c4e8;
   background: rgba(255, 255, 255, 0.05);
 }
 
 .ctrl-btn.active {
-  color: #a855f7;
+  color: #3b82f6;
 }
 
 .ctrl-btn.active:hover {
-  color: #c084fc;
+  color: #60a5fa;
 }
 
 .repeat-badge {
@@ -415,7 +415,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   right: 1px;
   font-size: 7px;
   font-weight: 800;
-  color: #a855f7;
+  color: #3b82f6;
   line-height: 1;
 }
 
@@ -423,20 +423,20 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 0 18px rgba(124, 58, 237, 0.45);
+  box-shadow: 0 0 18px rgba(29, 78, 216, 0.45);
   transition: transform 0.12s, box-shadow 0.2s;
 }
 
 .play-btn:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 28px rgba(168, 85, 247, 0.65);
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.65);
 }
 
 .play-btn:active {

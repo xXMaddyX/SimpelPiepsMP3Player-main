@@ -81,8 +81,8 @@ html, body, #app {
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  background: #0d0d14;
-  color: #f0f0ff;
+  background: #07101a;
+  color: #e8f0ff;
   user-select: none;
 }
 
