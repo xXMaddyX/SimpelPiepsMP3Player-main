@@ -1,12 +1,15 @@
 <script setup>
+// ------->>>>PlayerBar - the bottom audio player with controls, seek bar and volume<<<<-------
 import { ref, inject, computed, onMounted, onBeforeUnmount } from 'vue';
 import { store } from '../store';
 
+// ------->>>>the actual HTML audio element used for all playback<<<<-------
 const audioRef = ref(null);
 const tracklist = inject('musicFiles');
-const seeking = ref(false);
+const seeking = ref(false);   // ------->>>>true while user is dragging the seek bar<<<<-------
 const seekValue = ref(0);
 
+// ------->>>>convert raw seconds to m:ss display format<<<<-------
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return '0:00';
   const m = Math.floor(seconds / 60);
@@ -14,15 +17,17 @@ const formatTime = (seconds) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
+// ------->>>>seek fill width as a percentage of total duration<<<<-------
 const progressPercent = computed(() =>
   store.duration ? (seekValue.value / store.duration) * 100 : 0
 );
 
+// ------->>>>volume fill width - 0 when muted<<<<-------
 const volPercent = computed(() =>
   store.isMuted ? 0 : store.volume * 100
 );
 
-// --- Music playback ---
+// ------->>>>MUSIC PLAYBACK - load and play a local file by path<<<<-------
 const playTrack = (trackPath, index) => {
   store.mode = 'music';
   store.radioStation = null;
@@ -32,11 +37,12 @@ const playTrack = (trackPath, index) => {
   audio.play();
   store.currentTrackIndex = index;
   store.isPlaying = true;
+  // ------->>>>strip path and extension to get display name<<<<-------
   const parts = trackPath.replace(/\\/g, '/').split('/');
   store.currentTrackName = parts[parts.length - 1].replace(/\.[^/.]+$/, '');
 };
 
-// --- Radio playback ---
+// ------->>>>RADIO PLAYBACK - stream a station, fallback to non-resolved URL if needed<<<<-------
 const playStation = (station) => {
   store.mode = 'radio';
   store.radioStation = station;
@@ -49,7 +55,7 @@ const playStation = (station) => {
   audio.src = station.url_resolved;
   audio.volume = store.isMuted ? 0 : store.volume;
   audio.play().catch(() => {
-    // Some streams may need a retry with the non-resolved URL
+    // ------->>>>some streams fail with resolved URL, retry with the raw one<<<<-------
     audio.src = station.url;
     audio.play().catch(() => { store.isPlaying = false; });
   });

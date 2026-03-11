@@ -1,13 +1,17 @@
 <script setup>
+// ------->>>>TitleBar - custom window frame with controls, folder picker and theme switcher<<<<-------
 import { inject } from 'vue';
 import { store } from '../store';
 
+// ------->>>>inject the shared music file list from App.vue<<<<-------
 const musicFiles = inject('musicFiles');
 
+// ------->>>>window control buttons - talk to Electron via preload API<<<<-------
 const minimize = () => window.API.minimizeWindow();
 const maximize = () => window.API.maximizeWindow();
 const close = () => window.API.exitApp();
 
+// ------->>>>open a folder dialog and fill the tracklist with found audio files<<<<-------
 const openFolder = async () => {
   const result = await window.API.selectDirectory();
   if (result) {
@@ -16,6 +20,7 @@ const openFolder = async () => {
   }
 };
 
+// ------->>>>available color themes for the app<<<<-------
 const themes = [
   { id: 'blue',   color: '#3b82f6', label: 'Blau'  },
   { id: 'purple', color: '#a855f7', label: 'Lila'  },
@@ -32,7 +37,7 @@ const themes = [
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
           <path d="M9 8l8 4-8 4V8z" fill="currentColor"/>
         </svg>
-        <span class="app-name">Pieps Music Player</span>
+        <span class="app-name">Pieps Music Player by PiepsSoft</span>
       </div>
     </div>
 

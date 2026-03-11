@@ -1,4 +1,5 @@
 <script setup>
+// ------->>>>App.vue - root component, wires together all parts of the player<<<<-------
 import { ref, provide, watch, onMounted, onBeforeUnmount } from 'vue';
 import { store } from './store';
 import TitleBar from './components/TitleBar.vue';
@@ -6,21 +7,26 @@ import TrackList from './components/TrackList.vue';
 import MainView from './components/MainView.vue';
 import PlayerBar from './components/PlayerBar.vue';
 
+// ------->>>>music file list shared down to TrackList and PlayerBar via provide/inject<<<<-------
 const musicFiles = ref([]);
 provide('musicFiles', musicFiles);
 
+// ------->>>>save theme to localStorage whenever it changes<<<<-------
 watch(() => store.theme, (t) => localStorage.setItem('pieps-theme', t));
 
 const playerBarRef = ref(null);
 
+// ------->>>>called by TrackList when the user clicks a song<<<<-------
 const playSelectedTrack = (trackPath, index) => {
   playerBarRef.value.playTrack(trackPath, index);
 };
 
+// ------->>>>called by TrackList when the user clicks a radio station<<<<-------
 const playSelectedStation = (station) => {
   playerBarRef.value.playStation(station);
 };
 
+// ------->>>>global keyboard shortcuts - Space, arrows, N, P, M<<<<-------
 const handleKeydown = (e) => {
   if (e.target.tagName === 'INPUT') return;
   const pb = playerBarRef.value;

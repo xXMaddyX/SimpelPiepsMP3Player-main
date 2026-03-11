@@ -1,18 +1,22 @@
 <script setup>
+// ------->>>>TrackList - sidebar with music library and radio station browser<<<<-------
 import { inject, ref, computed, watch } from 'vue';
 import { store } from '../store';
 
+// ------->>>>get the shared music file list injected from App.vue<<<<-------
 const tracklist = inject('musicFiles');
 const emit = defineEmits(['trackSelected', 'stationSelected']);
 
-// --- Music ---
+// ------->>>>MUSIC MODE - local file search and track selection<<<<-------
 const searchQuery = ref('');
 
+// ------->>>>strip directory path and file extension to get a clean track name<<<<-------
 const getTrackName = (filePath) => {
   const parts = filePath.replace(/\\/g, '/').split('/');
   return parts[parts.length - 1].replace(/\.[^/.]+$/, '');
 };
 
+// ------->>>>filter tracks live as the user types in the search box<<<<-------
 const filteredTracks = computed(() => {
   const q = searchQuery.value.toLowerCase();
   return tracklist.value
@@ -22,13 +26,14 @@ const filteredTracks = computed(() => {
 
 const selectTrack = (path, index) => emit('trackSelected', path, index);
 
-// --- Radio ---
+// ------->>>>RADIO MODE - fetch stations from radio-browser.info API<<<<-------
 const stations = ref([]);
 const radioLoading = ref(false);
 const radioError = ref(false);
 const radioSearch = ref('');
 let fetchTimeout = null;
 
+// ------->>>>fetch top stations or search by name - sorted by votes, broken ones hidden<<<<-------
 const fetchStations = async (search = '') => {
   radioLoading.value = true;
   radioError.value = false;
@@ -53,12 +58,14 @@ const fetchStations = async (search = '') => {
   }
 };
 
+// ------->>>>auto-load stations when switching to radio mode for the first time<<<<-------
 watch(() => store.mode, (mode) => {
   if (mode === 'radio' && stations.value.length === 0 && !radioLoading.value) {
     fetchStations();
   }
 });
 
+// ------->>>>debounce radio search so we don't spam the API on every keystroke<<<<-------
 watch(radioSearch, (q) => {
   clearTimeout(fetchTimeout);
   fetchTimeout = setTimeout(() => fetchStations(q), 450);
@@ -66,6 +73,7 @@ watch(radioSearch, (q) => {
 
 const selectStation = (station) => emit('stationSelected', station);
 
+// ------->>>>check if this specific station is the one currently playing<<<<-------
 const isStationPlaying = (station) =>
   store.mode === 'radio' &&
   store.radioStation?.stationuuid === station.stationuuid;
