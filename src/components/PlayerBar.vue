@@ -22,7 +22,10 @@ const volPercent = computed(() =>
   store.isMuted ? 0 : store.volume * 100
 );
 
+// --- Music playback ---
 const playTrack = (trackPath, index) => {
+  store.mode = 'music';
+  store.radioStation = null;
   const audio = audioRef.value;
   audio.src = trackPath;
   audio.volume = store.isMuted ? 0 : store.volume;
@@ -33,8 +36,28 @@ const playTrack = (trackPath, index) => {
   store.currentTrackName = parts[parts.length - 1].replace(/\.[^/.]+$/, '');
 };
 
+// --- Radio playback ---
+const playStation = (station) => {
+  store.mode = 'radio';
+  store.radioStation = station;
+  store.currentTrackName = station.name;
+  store.currentTrackIndex = 0;
+  store.currentTime = 0;
+  store.duration = 0;
+  seekValue.value = 0;
+  const audio = audioRef.value;
+  audio.src = station.url_resolved;
+  audio.volume = store.isMuted ? 0 : store.volume;
+  audio.play().catch(() => {
+    // Some streams may need a retry with the non-resolved URL
+    audio.src = station.url;
+    audio.play().catch(() => { store.isPlaying = false; });
+  });
+  store.isPlaying = true;
+};
+
 const togglePlay = () => {
-  if (store.currentTrackIndex === -1) return;
+  if (store.currentTrackIndex === -1 && !store.radioStation) return;
   const audio = audioRef.value;
   if (store.isPlaying) {
     audio.pause();
@@ -46,6 +69,7 @@ const togglePlay = () => {
 };
 
 const playNextTrack = () => {
+  if (store.mode === 'radio') return;
   if (!tracklist.value.length) return;
 
   if (store.repeatMode === 2) {
@@ -70,6 +94,7 @@ const playNextTrack = () => {
 };
 
 const playPrevTrack = () => {
+  if (store.mode === 'radio') return;
   if (!tracklist.value.length) return;
   const audio = audioRef.value;
   if (audio.currentTime > 3) {
@@ -83,12 +108,14 @@ const playPrevTrack = () => {
 };
 
 const seekRelative = (seconds) => {
+  if (store.mode === 'radio') return;
   const audio = audioRef.value;
   if (!audio) return;
   audio.currentTime = Math.max(0, Math.min(audio.currentTime + seconds, store.duration));
 };
 
 const onTimeUpdate = () => {
+  if (store.mode === 'radio') return;
   if (!seeking.value) {
     store.currentTime = audioRef.value.currentTime;
     seekValue.value = audioRef.value.currentTime;
@@ -97,7 +124,12 @@ const onTimeUpdate = () => {
 };
 
 const onLoadedMetadata = () => {
+  if (store.mode === 'radio') return;
   store.duration = audioRef.value.duration || 0;
+};
+
+const onEnded = () => {
+  if (store.mode === 'music') playNextTrack();
 };
 
 const onSeekMousedown = () => { seeking.value = true; };
@@ -132,7 +164,7 @@ const repeatTitle = computed(() => {
   return 'Repeat One';
 });
 
-defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative, toggleMute });
+defineExpose({ playTrack, playStation, togglePlay, playNextTrack, playPrevTrack, seekRelative, toggleMute });
 </script>
 
 <template>
@@ -141,10 +173,11 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
       ref="audioRef"
       @timeupdate="onTimeUpdate"
       @loadedmetadata="onLoadedMetadata"
-      @ended="playNextTrack"
+      @ended="onEnded"
     />
 
-    <div class="progress-row">
+    <!-- Music: progress bar -->
+    <div v-if="store.mode === 'music'" class="progress-row">
       <span class="time">{{ formatTime(store.currentTime) }}</span>
       <div class="seek-track">
         <div class="seek-fill" :style="{ width: progressPercent + '%' }"></div>
@@ -164,13 +197,23 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
       <span class="time right">{{ formatTime(store.duration) }}</span>
     </div>
 
+    <!-- Radio: live indicator -->
+    <div v-else class="progress-row radio-row">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        LIVE
+      </div>
+      <div class="live-track-name">{{ store.radioStation?.name || '' }}</div>
+    </div>
+
     <div class="controls-row">
 
       <div class="controls-side left">
         <button
-          :class="['ctrl-btn', { active: store.shuffleMode }]"
+          :class="['ctrl-btn', { active: store.shuffleMode, disabled: store.mode === 'radio' }]"
           @click="toggleShuffle"
           title="Shuffle"
+          :disabled="store.mode === 'radio'"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="16 3 21 3 21 8"/>
@@ -181,9 +224,10 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
         </button>
 
         <button
-          :class="['ctrl-btn', { active: store.repeatMode > 0 }]"
+          :class="['ctrl-btn', { active: store.repeatMode > 0, disabled: store.mode === 'radio' }]"
           @click="toggleRepeat"
           :title="repeatTitle"
+          :disabled="store.mode === 'radio'"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="17 1 21 5 17 9"/>
@@ -196,7 +240,13 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
       </div>
 
       <div class="controls-center">
-        <button class="ctrl-btn" @click="playPrevTrack" title="Vorheriger Track (P)">
+        <button
+          class="ctrl-btn"
+          @click="playPrevTrack"
+          :disabled="store.mode === 'radio'"
+          :class="{ disabled: store.mode === 'radio' }"
+          title="Vorheriger Track (P)"
+        >
           <svg viewBox="0 0 24 24" fill="currentColor">
             <polygon points="19 20 9 12 19 4 19 20"/>
             <rect x="4" y="4" width="3" height="16" rx="1"/>
@@ -213,7 +263,13 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
           </svg>
         </button>
 
-        <button class="ctrl-btn" @click="playNextTrack" title="Nächster Track (N)">
+        <button
+          class="ctrl-btn"
+          @click="playNextTrack"
+          :disabled="store.mode === 'radio'"
+          :class="{ disabled: store.mode === 'radio' }"
+          title="Nächster Track (N)"
+        >
           <svg viewBox="0 0 24 24" fill="currentColor">
             <polygon points="5 4 15 12 5 20 5 4"/>
             <rect x="17" y="4" width="3" height="16" rx="1"/>
@@ -276,6 +332,48 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   gap: 10px;
 }
 
+.radio-row {
+  justify-content: center;
+  gap: 12px;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--cs);
+  background: rgba(var(--csr), 0.12);
+  border: 1px solid rgba(var(--csr), 0.3);
+  padding: 2px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cs);
+  animation: dotBlink 1.2s ease-in-out infinite;
+}
+
+@keyframes dotBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.live-track-name {
+  font-size: 12px;
+  color: #88aacc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+}
+
 .time {
   font-size: 11px;
   color: #446688;
@@ -298,13 +396,13 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 }
 
 .seek-track:hover .seek-fill {
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.55);
+  box-shadow: 0 0 8px rgba(var(--csr), 0.55);
 }
 
 .seek-fill {
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  background: linear-gradient(90deg, var(--cp), var(--cs));
   border-radius: 2px;
   pointer-events: none;
   transition: width 0.05s linear;
@@ -317,7 +415,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #60a5fa;
+  background: var(--cl);
   pointer-events: none;
   transition: transform 0.1s;
 }
@@ -338,7 +436,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
 .vol-fill {
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  background: linear-gradient(90deg, var(--cp), var(--cs));
   border-radius: 2px;
   pointer-events: none;
 }
@@ -387,7 +485,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s, background 0.15s, opacity 0.15s;
   position: relative;
 }
 
@@ -396,17 +494,23 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   height: 17px;
 }
 
-.ctrl-btn:hover {
+.ctrl-btn:hover:not(:disabled) {
   color: #a0c4e8;
   background: rgba(255, 255, 255, 0.05);
 }
 
 .ctrl-btn.active {
-  color: #3b82f6;
+  color: var(--cs);
 }
 
 .ctrl-btn.active:hover {
-  color: #60a5fa;
+  color: var(--cl);
+}
+
+.ctrl-btn.disabled,
+.ctrl-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 .repeat-badge {
@@ -415,7 +519,7 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   right: 1px;
   font-size: 7px;
   font-weight: 800;
-  color: #3b82f6;
+  color: var(--cs);
   line-height: 1;
 }
 
@@ -423,20 +527,20 @@ defineExpose({ playTrack, togglePlay, playNextTrack, playPrevTrack, seekRelative
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  background: linear-gradient(135deg, var(--cp), var(--cs));
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 0 18px rgba(29, 78, 216, 0.45);
+  box-shadow: 0 0 18px rgba(var(--cpr), 0.45);
   transition: transform 0.12s, box-shadow 0.2s;
 }
 
 .play-btn:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 28px rgba(59, 130, 246, 0.65);
+  box-shadow: 0 0 28px rgba(var(--csr), 0.65);
 }
 
 .play-btn:active {

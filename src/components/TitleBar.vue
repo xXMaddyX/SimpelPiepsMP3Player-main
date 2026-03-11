@@ -1,5 +1,6 @@
 <script setup>
 import { inject } from 'vue';
+import { store } from '../store';
 
 const musicFiles = inject('musicFiles');
 
@@ -14,6 +15,13 @@ const openFolder = async () => {
     musicFiles.value = files.map(f => `${directoryPath}/${f}`);
   }
 };
+
+const themes = [
+  { id: 'blue',   color: '#3b82f6', label: 'Blau'  },
+  { id: 'purple', color: '#a855f7', label: 'Lila'  },
+  { id: 'green',  color: '#22c55e', label: 'Grün'  },
+  { id: 'pink',   color: '#ec4899', label: 'Pink'  },
+];
 </script>
 
 <template>
@@ -21,8 +29,8 @@ const openFolder = async () => {
     <div class="drag-region">
       <div class="app-info">
         <svg class="app-icon" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#1d4ed8" stroke-width="1.5"/>
-          <path d="M9 8l8 4-8 4V8z" fill="#3b82f6"/>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <path d="M9 8l8 4-8 4V8z" fill="currentColor"/>
         </svg>
         <span class="app-name">Pieps Music Player</span>
       </div>
@@ -35,6 +43,18 @@ const openFolder = async () => {
         </svg>
         <span>Ordner öffnen</span>
       </button>
+
+      <div class="theme-dots">
+        <button
+          v-for="t in themes"
+          :key="t.id"
+          class="dot"
+          :class="{ active: store.theme === t.id }"
+          :style="{ background: t.color }"
+          :title="t.label"
+          @click="store.theme = t.id"
+        />
+      </div>
 
       <div class="separator"></div>
 
@@ -90,6 +110,7 @@ const openFolder = async () => {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
+  color: var(--cs);
 }
 
 .app-name {
@@ -129,7 +150,33 @@ const openFolder = async () => {
 
 .folder-btn:hover {
   color: #e8f0ff;
-  background: rgba(29, 78, 216, 0.18);
+  background: rgba(var(--cpr), 0.18);
+}
+
+.theme-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+  padding: 0;
+}
+
+.dot:hover {
+  transform: scale(1.25);
+}
+
+.dot.active {
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 6px currentColor;
 }
 
 .separator {

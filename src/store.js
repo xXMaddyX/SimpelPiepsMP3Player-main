@@ -10,4 +10,7 @@ export const store = reactive({
   isMuted: false,
   currentTime: 0,
   duration: 0,
+  theme: localStorage.getItem('pieps-theme') || 'blue',
+  mode: 'music',
+  radioStation: null,
 });
