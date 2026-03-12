@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "package": "electron-packager . PiepsMusicPlayer --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"(\\.git|release|src)\"",
+    "package": "electron-packager . PiepsMusicPlayer --platform=win32 --arch=x64 --out=release --overwrite --icon=PiepsmitTasseico.ico --ignore=\"(\\.git|release|src)\"",
     "dist": "npm run build && npm run package"
   },
   "dependencies": {
